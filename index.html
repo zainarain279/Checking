@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract tgWebAppData</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh; /* Ensures the body covers full height */
+            display: flex;
+            flex-direction: column; /* Allows footer placement */
+            justify-content: space-between; /* Keeps footer at the bottom */
+            background: linear-gradient(to bottom right, #00c6ff, #0072ff); /* Gradient background */
+            color: white;
+        }
+
+        input, button {
+            margin: 10px;
+            padding: 10px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .airplane, .blast {
+            position: absolute;
+            font-size: 40px;
+            animation: flyAirplane linear infinite;
+        }
+
+        @keyframes flyAirplane {
+            0% { transform: translate(var(--start-x), var(--start-y)); }
+            100% { transform: translate(var(--end-x), var(--end-y)); }
+        }
+
+        @keyframes blastAnimation {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(2); }
+        }
+
+        .blast {
+            animation: blastAnimation 1s forwards;
+        }
+
+        .telegram-logo {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .telegram-logo:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7); /* Slight transparent background */
+            padding: 10px 0;
+        }
+
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://t.me/AirdropScript6" target="_blank">
+        <img src="https://telegram.org/img/t_logo.png" alt="Telegram Logo" class="telegram-logo">
+    </a>
+
+    <h1>Extract tgWebAppData</h1>
+    <p>Enter the URL containing the <code>tgWebAppData</code> parameter:</p>
+    <input type="text" id="urlInput" placeholder="Enter URL here">
+    <button onclick="processUrl()">Extract</button>
+    <div id="result"></div>
+
+    <script>
+        function generateAirplane() {
+            const airplane = document.createElement('div');
+            airplane.classList.add('airplane');
+            airplane.textContent = '✈️';
+
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 100;
+            const endX = Math.random() * 100;
+            const endY = Math.random() * 100;
+            const duration = Math.random() * 10 + 5;
+
+            airplane.style.setProperty('--start-x', `${startX}vw`);
+            airplane.style.setProperty('--start-y', `${startY}vh`);
+            airplane.style.setProperty('--end-x', `${endX}vw`);
+            airplane.style.setProperty('--end-y', `${endY}vh`);
+            airplane.style.animationDuration = `${duration}s`;
+            airplane.style.animationTimingFunction = 'ease-in-out';
+
+            document.body.appendChild(airplane);
+
+            setTimeout(() => {
+                createBlast(airplane);
+                setTimeout(generateAirplane, 1000);
+            }, duration * 1000);
+        }
+
+        function createBlast(airplane) {
+            const blast = document.createElement('div');
+            blast.classList.add('blast');
+            blast.textContent = '💥';
+
+            blast.style.left = airplane.style.left;
+            blast.style.top = airplane.style.top;
+
+            document.body.appendChild(blast);
+
+            setTimeout(() => {
+                airplane.remove();
+                blast.remove();
+            }, 1000);
+        }
+
+        window.onload = generateAirplane;
+
+        function processUrl() {
+            const urlInput = document.getElementById('urlInput').value;
+            const resultDisplay = document.getElementById('result');
+            const regex = /tgWebAppData=([^&]+)/;
+            const match = urlInput.match(regex);
+
+            if (match) {
+                const tgWebAppData = decodeURIComponent(match[1]);
+                resultDisplay.innerHTML = `
+                    <p>Extracted tgWebAppData:</p>
+                    <textarea id="extractedData" readonly>${tgWebAppData}</textarea>
+                    <button onclick="copyToClipboard()">Copy</button>
+                `;
+            } else {
+                resultDisplay.textContent = "The URL is incorrect. Parameter 'tgWebAppData=' was not found.";
+            }
+        }
+
+        function copyToClipboard() {
+            const extractedData = document.getElementById('extractedData');
+            extractedData.select();
+            document.execCommand('copy');
+            alert('Copied to clipboard!');
+        }
+    </script>
+
+    <footer>
+        <div style="font-size: 24px; font-weight: bold;">ZAIN ARAIN ♥️</div>
+        <div style="font-size: 18px;">AUTO SCRIPT MASTER</div>
+        <p style="margin-top: 10px;">JOIN TELEGRAM CHANNEL NOW!</p>
+        <a href="https://t.me/AirdropScript6" target="_blank" style="color: red; text-decoration: none; font-weight: bold;">https://t.me/AirdropScript6</a>
+        <br>
+        <span style="font-size: 16px;">@AirdropScript6 - OFFICIAL CHANNEL</span>
+        <hr style="margin: 15px 0; border: 1px solid red;">
+        <p>FAST - RELIABLE - SECURE</p>
+        <p>SCRIPTS EXPERT</p>
+        <p style="font-size: 12px;">Zain-Arain = <a href="https://t.me/AirdropScript6" target="_blank" style="color: red;">t.me/AirdropScript6</a> || 2025</p>
+    </footer>
+</body>
+</html>
